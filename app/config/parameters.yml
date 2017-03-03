@@ -1,0 +1,14 @@
+# This file is auto-generated during the composer install
+# These parameters are overridden by parameters.php to support Cloud Foundry
+parameters:
+    database_host: 127.0.0.1
+    database_port: null
+    database_name: symfony
+    database_user: root
+    database_password: null
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: null
+    mailer_password: null
+    secret: 67990515fe8b823108c5e15e01f3c5ebe23bdaf1
+    database_path: '%kernel.root_dir%/../var/data/data.sqlite'
