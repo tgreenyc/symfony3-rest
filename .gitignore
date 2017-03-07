@@ -14,3 +14,4 @@
 /vendor/
 /web/bundles/
 *.swp
+/ci/credentials.yml
