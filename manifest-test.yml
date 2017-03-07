@@ -3,3 +3,10 @@ applications:
 - name: sym3-qa
   memory: 512M
   instances: 1
+  services:
+    - mysql
+  path: /tmp/build/put/git-repo
+  env:
+    SYMFONY_ENV: prod
+    DOCUMENT_ROOT: web
+    PHP_INI_SCAN_DIR: /home/vcap/app/.bp-config/php/php.d

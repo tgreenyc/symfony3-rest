@@ -25,11 +25,11 @@ jobs:
       params:
         manifest: git-repo/manifest-test.yml
         # Optional. This should be the name of the application that this will re-deploy over. If this is set the resource will perform a zero-downtime deploy.
-        current_app_name: sym3-{{CF_TEST_SPACE}}
+        current_app_name: sym3-qa
     - task: verify
       file: git-repo/ci/tasks/verify-test.yml
       params:
-        CONCOURSE_DEMO_URL: http://sym3-{{CF_TEST_SPACE}}.cfapps.haas-85.pez.pivotal.io
+        CONCOURSE_DEMO_URL: http://sym3-qa.cfapps.haas-85.pez.pivotal.io
 
       #
       #  - name: promote-to-uat
