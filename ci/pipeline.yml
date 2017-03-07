@@ -14,45 +14,23 @@ jobs:
     - task: functional
       file: git-repo/ci/tasks/integrate.yml
 
-      #  - name: build-artifact
-      #    serial_groups: [version]
-      #    serial: true
-      #    plan:
-      #    - get: git-repo
-      #      passed: [unit-tests]
-      #      trigger: true
-      #    - get: version
-      #      params: { pre: rc }
-      #    - task: build-artifact
-      #      file: git-repo/ci/tasks/build-artifact.yml
-      #      timeout: 5m
-      #    - put: release-candidate
-      #      params:
-      #        file: artifact-dir/spring-music-*.war
-      #    - put: version
-      #      params: {file: version/number}
-      #
-      #  - name: integration-tests
-      #    serial_groups: [version]
-      #    plan:
-      #    - aggregate:
-      #      - get: version
-      #        passed: [build-artifact]
-      #        trigger: true
-      #      - get: release-candidate
-      #        passed: [build-artifact]
-      #      - get: git-repo
-      #        passed: [build-artifact]
-      #    - put: deploy-test-app
-      #      params:
-      #        manifest: git-repo/manifest-test.yml
-      #        current_app_name: spring-music-test
-      #        path: release-candidate/spring-music-*.war
-      #    - task: verify
-      #      file: git-repo/ci/tasks/verify-test.yml
-      #      params:
-      #        # tsg-spring-music-test.cfapps.haas-46.pez.pivotal.io
-      #        CONCOURSE_DEMO_URL: http://tsg-spring-music-{{CF_TEST_SPACE}}.cfapps.haas-46.pez.pivotal.io
+  - name: functional-tests
+    serial_groups: [version]
+    plan:
+    - aggregate:
+      - get: git-repo
+        trigger: true
+        passed: [integration-tests]
+    - put: deploy-test-app
+      params:
+        manifest: git-repo/manifest-test.yml
+        # Optional. This should be the name of the application that this will re-deploy over. If this is set the resource will perform a zero-downtime deploy.
+        current_app_name: sym3-{{CF_TEST_SPACE}}
+    - task: verify
+      file: git-repo/ci/tasks/verify-test.yml
+      params:
+        CONCOURSE_DEMO_URL: http://sym3-{{CF_TEST_SPACE}}.cfapps.haas-85.pez.pivotal.io
+
       #
       #  - name: promote-to-uat
       #    serial_groups: [version]
@@ -124,12 +102,12 @@ resources:
     uri: {{GIT_REPO}}
     branch: master
 
-    #- name: deploy-test-app
-    #  type: cf
-    #  source:
-    #    api: {{CF_API}}
-    #    username: {{CF_USER}}
-    #    password: {{CF_PASS}}
-    #    organization: {{CF_TEST_ORG}}
-    #    space: {{CF_TEST_SPACE}}
-    #    skip_cert_check: true
+- name: deploy-test-app
+  type: cf
+  source:
+    api: {{CF_API}}
+    username: {{CF_USER}}
+    password: {{CF_PASS}}
+    organization: {{CF_TEST_ORG}}
+    space: {{CF_TEST_SPACE}}
+    skip_cert_check: true
