@@ -6,6 +6,14 @@ jobs:
     - task: unit
       file: git-repo/ci/tasks/unit.yml
 
+  - name: integration-tests
+    plan:
+    - get: git-repo
+      trigger: true
+      passed: [unit-tests]
+    - task: functional
+      file: git-repo/ci/tasks/integrate.yml
+
       #  - name: build-artifact
       #    serial_groups: [version]
       #    serial: true

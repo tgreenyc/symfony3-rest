@@ -9,7 +9,7 @@ USER root
 #RUN echo 'deb http://packages.dotdeb.org jessie all' >> /etc/apt/sources.list
 #RUN curl -sS https://www.dotdeb.org/dotdeb.gpg | apt-key add -
 RUN apt-get -y update
-RUN apt-get -y -f install curl
+RUN apt-get -y -f install curl git unzip
 RUN apt-get -y -f install php7.0 php7.0-mysql php7.0-dom php7.0-mbstring php7.0-curl
 
 # Install PHPUnit.
