@@ -6,11 +6,10 @@ MAINTAINER <tgreen@pivotal.io>
 USER root
 
 # Install PHP 7 packages.
-#RUN echo 'deb http://packages.dotdeb.org jessie all' >> /etc/apt/sources.list
-#RUN curl -sS https://www.dotdeb.org/dotdeb.gpg | apt-key add -
 RUN apt-get -y update
 RUN apt-get -y -f install curl git unzip
 RUN apt-get -y -f install php7.0 php7.0-mysql php7.0-dom php7.0-mbstring php7.0-curl
+RUN apt-get -y -f install sqlite3 libsqlite3-dev php7.0-sqlite3
 
 # Install PHPUnit.
 RUN curl -L -o /usr/local/bin/phpunit https://phar.phpunit.de/phpunit.phar
