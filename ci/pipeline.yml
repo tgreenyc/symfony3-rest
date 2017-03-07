@@ -26,74 +26,19 @@ jobs:
         manifest: git-repo/manifest-test.yml
         # Optional. This should be the name of the application that this will re-deploy over. If this is set the resource will perform a zero-downtime deploy.
         current_app_name: sym3-qa
+    - task: db-update
+      file: git-repo/ci/tasks/db-update.yml
+      params:
+        CF_API: {{CF_API}}
+        CF_USER: {{CF_USER}}
+        CF_PASS: {{CF_PASS}}
+        CF_TEST_ORG: {{CF_TEST_ORG}}
+        CF_TEST_SPACE: {{CF_TEST_SPACE}}
+        APPNAME: sym3-qa
     - task: verify
       file: git-repo/ci/tasks/verify-test.yml
       params:
         CONCOURSE_DEMO_URL: http://sym3-qa.cfapps.haas-85.pez.pivotal.io
-
-      #
-      #  - name: promote-to-uat
-      #    serial_groups: [version]
-      #    plan:
-      #    - aggregate:
-      #      - get: release-candidate
-      #        passed: [integration-tests]
-      #        trigger: true
-      #      - get: version
-      #        passed: [integration-tests]
-      #      - get: git-repo
-      #        passed: [integration-tests]
-      #    - put: deploy-uat-app
-      #      params:
-      #        manifest: git-repo/manifest-uat.yml
-      #        current_app_name: spring-music-uat
-      #        path: release-candidate/spring-music-*.war
-      #
-      #  - name: ship-it
-      #    serial_groups: [version]
-      #    serial: true
-      #    plan:
-      #    - aggregate:
-      #      - get: release-candidate
-      #        passed: [promote-to-uat]
-      #      - get: version
-      #        params: { bump: final }
-      #        passed: [promote-to-uat]
-      #      - get: git-repo
-      #        passed: [promote-to-uat]
-      #    - task: prepare-final
-      #      file: git-repo/ci/tasks/prepare-final.yml
-      #      params:
-      #        base_name: spring-music
-      #    - put: production-release
-      #      params:
-      #        file: final-dir/spring-music*.war
-      #    - put: deploy-production-app
-      #      params:
-      #        manifest: git-repo/manifest-prod.yml
-      #        current_app_name: spring-music
-      #        path: final-dir/spring-music*.war
-      #
-      #  - name: major
-      #    serial_groups: [ version ]
-      #    plan:
-      #      - put: version
-      #        params: { bump: major, pre: rc }
-      #
-      #  - name: minor
-      #    serial_groups: [ version ]
-      #    plan:
-      #      - put: version
-      #        params: { bump: minor, pre: rc }
-      #
-      #  - name: patch
-      #    serial_groups: [ version ]
-      #    plan:
-      #      - get: version
-      #        passed: [ ship-it ]
-      #        trigger: true
-      #      - put: version
-      #        params: { bump: patch }
 
 resources:
 - name: git-repo
